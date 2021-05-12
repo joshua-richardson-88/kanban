@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+// import react modules
+import React from 'react'
 
-function App() {
+// import modules
+import { ThemeProvider } from '@material-ui/core/styles'
+import { CssBaseline } from '@material-ui/core'
+
+// import project files
+import useDarkMode from './hooks/useDarkMode'
+import { Header } from './components/molecules'
+import { Projects } from './components/organisms'
+
+export default function App() {
+  const [theme, toggleDarkMode] = useDarkMode()
+
+  const handleAddProject = (projectTitle) => {
+    console.log(projectTitle)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div className='app'>
+        <Header addNewProject={handleAddProject} toggleTheme={toggleDarkMode} />
+        <Projects />
+      </div>
+    </ThemeProvider>
+  )
 }
-
-export default App;
