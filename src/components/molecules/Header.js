@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { fade, makeStyles } from '@material-ui/core/styles'
+import { useDispatch } from 'react-redux'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import MoreIcon from '@material-ui/icons/MoreVert'
@@ -21,6 +22,7 @@ import Brightness4Icon from '@material-ui/icons/Brightness4'
 
 // import project files
 import { Spacer } from '../atoms'
+import { createProject } from '../../features/projects/projectSlice'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -77,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Header(props) {
+  const dispatch = useDispatch()
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
@@ -104,7 +107,7 @@ export default function Header(props) {
     setMobileMoreAnchorEl(event.currentTarget)
   }
   const handleCreateProject = (event) => {
-    if (event.charCode === 13) props.addNewProject(newProjectTitle)
+    if (event.charCode === 13) dispatch(createProject(newProjectTitle))
   }
 
   const menuId = 'primary-search-account-menu'

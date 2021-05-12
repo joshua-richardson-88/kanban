@@ -13,19 +13,11 @@ import { Projects } from './components/organisms'
 export default function App() {
   const [theme, toggleDarkMode] = useDarkMode()
 
-  const handleAddProject = (projectTitle) => {
-    console.log('need to create a project titled: ', projectTitle)
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className='app'>
-        <Header
-          addNewProject={handleAddProject}
-          darkMode={theme.palette.type}
-          toggleTheme={toggleDarkMode}
-        />
+        <Header darkMode={theme.palette.type} toggleTheme={toggleDarkMode} />
         <Projects />
       </div>
     </ThemeProvider>
