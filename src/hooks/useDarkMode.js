@@ -14,17 +14,17 @@ const defaultDarkMode = {
 export default function useDarkMode() {
   const [darkState, setDarkState] = useState(null)
 
-  // // when this function is rendered, pull data from local storage, or populate
-  // // default project list
-  // useEffect(() => {
-  //   const storedData = JSON.parse(localStorage.getItem('DARK_MODE'))
-  //   setDarkState(storedData ? storedData : defaultDarkMode)
-  // }, [])
+  // when this function is rendered, pull data from local storage, or populate
+  // default project list
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem('DARK_MODE'))
+    setDarkState(storedData ? storedData : defaultDarkMode)
+  }, [])
 
-  // // when the data state changes, save the changed data to local storage
-  // useEffect(() => {
-  //   localStorage.setItem('DARK_MODE', JSON.stringify(darkState))
-  // }, [darkState])
+  // when the data state changes, save the changed data to local storage
+  useEffect(() => {
+    localStorage.setItem('DARK_MODE', JSON.stringify(darkState))
+  }, [darkState])
 
   // define a theme
   const theme = createMuiTheme({
@@ -40,7 +40,7 @@ export default function useDarkMode() {
       },
     },
     palette: {
-      type: 'dark',
+      type: darkState?.isDarkMode ? 'dark' : 'light',
       primary: {
         light: blue[800],
         main: blue[800],
