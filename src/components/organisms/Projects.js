@@ -5,4 +5,6 @@ import React from 'react'
 
 // import project files
 
-export default function Projects(props) {}
+export default function Projects(props) {
+  return <div></div>
+}

@@ -1,5 +1,5 @@
 // import react libraries
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // import modules
 import { createMuiTheme } from '@material-ui/core/styles'
@@ -13,13 +13,18 @@ const defaultDarkMode = {
 
 export default function useDarkMode() {
   const [darkState, setDarkState] = useState(null)
-  const paletteType = darkState.isDarkMode ? 'dark' : 'light'
-  console.log('state is: ', darkState)
 
-  // try to get the local storage
-  const storedData = JSON.parse(localStorage.getItem('DARK_MODE'))
-  setDarkState(storedData ? storedData : defaultDarkMode)
-  console.log('storedData is: ', storedData)
+  // // when this function is rendered, pull data from local storage, or populate
+  // // default project list
+  // useEffect(() => {
+  //   const storedData = JSON.parse(localStorage.getItem('DARK_MODE'))
+  //   setDarkState(storedData ? storedData : defaultDarkMode)
+  // }, [])
+
+  // // when the data state changes, save the changed data to local storage
+  // useEffect(() => {
+  //   localStorage.setItem('DARK_MODE', JSON.stringify(darkState))
+  // }, [darkState])
 
   // define a theme
   const theme = createMuiTheme({
@@ -35,7 +40,7 @@ export default function useDarkMode() {
       },
     },
     palette: {
-      type: paletteType,
+      type: 'dark',
       primary: {
         light: blue[800],
         main: blue[800],

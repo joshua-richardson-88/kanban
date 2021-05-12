@@ -17,6 +17,8 @@ export default function App() {
     console.log(projectTitle)
   }
 
+  // return <div></div>
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
