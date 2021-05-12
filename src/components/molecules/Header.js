@@ -18,14 +18,21 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
-      width: '25ch',
+      width: '40ch',
     },
+  },
+  header: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
 }))
 
 export default function Header(props) {
   const classes = useStyles()
   const [projectTitle, setProjectTitle] = useState('New Project')
+  const [showHelpText, setShowHelpText] = useState(false)
 
   const handleInputChange = (event) => {
     const newTitle = event.target.value
@@ -41,25 +48,26 @@ export default function Header(props) {
   }
 
   return (
-    <>
-      <Typography>What are you working on?</Typography>
+    <div className={classes.header}>
+      <Typography variant='h5'>What are you working on?</Typography>
       <form className={classes.root} noValidate autoComplete='off' onSubmit={handleSubmit}>
         <FormControl>
-          <InputLabel htmlFor='new-project'>New Project</InputLabel>
           <Input
             id='new-project'
             value={projectTitle}
             onChange={handleInputChange}
             aria-describedby='new-project-helper-text'
           />
-          <FormHelperText id='new-project-helper-text'>
-            Use this form to create a new project
-          </FormHelperText>
+          {showHelpText ? (
+            <FormHelperText id='new-project-helper-text'>
+              Use this form to create a new project
+            </FormHelperText>
+          ) : null}
         </FormControl>
         <Button type='submit' variant='contained' color='primary'>
           Create
         </Button>
       </form>
-    </>
+    </div>
   )
 }
