@@ -14,16 +14,18 @@ export default function App() {
   const [theme, toggleDarkMode] = useDarkMode()
 
   const handleAddProject = (projectTitle) => {
-    console.log(projectTitle)
+    console.log('need to create a project titled: ', projectTitle)
   }
-
-  // return <div></div>
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className='app'>
-        <Header addNewProject={handleAddProject} toggleTheme={toggleDarkMode} />
+        <Header
+          addNewProject={handleAddProject}
+          darkMode={theme.palette.type}
+          toggleTheme={toggleDarkMode}
+        />
         <Projects />
       </div>
     </ThemeProvider>

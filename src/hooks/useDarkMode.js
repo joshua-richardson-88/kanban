@@ -66,20 +66,19 @@ export default function useDarkMode() {
       body1: {
         fontSize: '1.25rem',
         fontWeight: 300,
-        color: darkState ? grey[50] : grey[800],
+        color: darkState?.isDarkMode ? grey[50] : grey[800],
       },
       subtitle1: {
         fontSize: '1.25rem',
         fontWeight: 500,
-        color: darkState ? grey[400] : grey[500],
+        color: darkState?.isDarkMode ? grey[400] : grey[500],
       },
     },
   })
 
-  console.log('theme is: ', theme)
-
   const toggleDarkMode = () => {
-    setDarkState(!darkState)
+    console.log('made it to hook')
+    setDarkState((prevState) => ({ ...prevState, isDarkMode: !prevState.isDarkMode }))
     localStorage.setItem('DARK_MODE', JSON.stringify(darkState))
   }
 
