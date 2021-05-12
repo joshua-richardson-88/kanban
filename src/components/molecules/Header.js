@@ -107,7 +107,10 @@ export default function Header(props) {
     setMobileMoreAnchorEl(event.currentTarget)
   }
   const handleCreateProject = (event) => {
-    if (event.charCode === 13) dispatch(createProject(newProjectTitle))
+    if (event.charCode === 13) {
+      dispatch(createProject(newProjectTitle))
+      setNewProjectTitle('')
+    }
   }
 
   const menuId = 'primary-search-account-menu'
