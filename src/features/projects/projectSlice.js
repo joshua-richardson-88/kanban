@@ -24,8 +24,34 @@ const projectSlice = createSlice({
         return { payload: { id, title, color, columnIds: [] } }
       },
     },
+    editColumnOrder(
+      state,
+      { payload: { columnId, destination, endProjectId, source, startProjectId } }
+    ) {
+      if (startProjectId === endProjectId) {
+        state.project[startProjectId].columnIds.splice(source, 1)
+        state.project[startProjectId].columnIds.splice(destination, 0, columnId)
+      } else {
+        state.project[startProjectId].columnIds.splice(source, 1)
+        state.project[endProjectId].columnIds.splice(destination, 0, columnId)
+      }
+    },
+    editProjectOrder(state, { payload: { source, destination, id } }) {
+      state.projectOrder.splice(source, 1)
+      state.projectOrder.splice(destination, 0, id)
+    },
+    editTaskOrder(state, { payload: { startColumnId, endColumnId, source, destination, taskId } }) {
+      if (startColumnId === endColumnId) {
+        state.project[startColumnId].columnIds.splice(source, 1)
+        state.project[startColumnId].columnIds.splice(destination, 0, taskId)
+      } else {
+        state.project[startColumnId].columnIds.splice(source, 1)
+        state.project[endColumnId].columnIds.splice(destination, 0, taskId)
+      }
+    },
   },
 })
 
-export const { createProject } = projectSlice.actions
+export const { createProject, editColumnOrder, editProjectOrder, editTaskOrder } =
+  projectSlice.actions
 export default projectSlice.reducer
