@@ -1,3 +1,4 @@
+import EditableText from './EditableText'
 import Spacer from './Spacer'
 
-export { Spacer }
+export { EditableText, Spacer }

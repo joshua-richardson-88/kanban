@@ -49,9 +49,17 @@ const projectSlice = createSlice({
         state.project[endColumnId].columnIds.splice(destination, 0, taskId)
       }
     },
+    updateProjectTitle(state, { payload: { projectId, newTitle } }) {
+      state.project[projectId].title = newTitle
+    },
   },
 })
 
-export const { createProject, editColumnOrder, editProjectOrder, editTaskOrder } =
-  projectSlice.actions
+export const {
+  createProject,
+  editColumnOrder,
+  editProjectOrder,
+  editTaskOrder,
+  updateProjectTitle,
+} = projectSlice.actions
 export default projectSlice.reducer

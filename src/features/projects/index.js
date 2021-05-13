@@ -3,7 +3,7 @@ import React from 'react'
 
 // import modules
 import { makeStyles } from '@material-ui/core/styles'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 import { Card } from '@material-ui/core'
 
@@ -14,11 +14,10 @@ import Project from './pages/Project'
 const useStyles = makeStyles((theme) => ({
   grow: {
     position: 'absolute',
-    top: 0,
+    top: 64,
     left: 0,
     width: '100vw',
     height: '100vh',
-    paddingTop: '64px',
   },
   dropZone: {
     margin: theme.spacing(2),
@@ -92,15 +91,19 @@ export default function Projects() {
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId='all-projects' direction='vertical' type='project'>
             {(provided) => (
-              <Card className={classes.projectsContainer}>
-                {projectOrder.map((id, index) => {
-                  console.log('id: ', id)
-                  console.log('projects: ', projects)
-                  const project = projects[id]
+              <div
+                className={classes.projectsContainer}
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                <Card>
+                  {projectOrder.map((id, index) => (
+                    <Project key={id} projectId={id} index={index} />
+                  ))}
+                </Card>
 
-                  return <Project projectId={project.id} index={index} />
-                })}
-              </Card>
+                {provided.placeholder}
+              </div>
             )}
           </Droppable>
         </DragDropContext>
