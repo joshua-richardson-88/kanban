@@ -13,18 +13,23 @@ import Project from './pages/Project'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
-    flexGrow: 1,
-    height: '93.4vh',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    paddingTop: '64px',
   },
   dropZone: {
     margin: theme.spacing(2),
-    width: '100%',
-    height: '100%',
   },
   projectsContainer: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: theme.palette.background.paper,
+    padding: '1rem',
   },
 }))
 
