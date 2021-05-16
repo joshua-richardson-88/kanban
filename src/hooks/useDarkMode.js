@@ -77,7 +77,6 @@ export default function useDarkMode() {
   })
 
   const toggleDarkMode = () => {
-    console.log('made it to hook')
     setDarkState((prevState) => ({ ...prevState, isDarkMode: !prevState.isDarkMode }))
     localStorage.setItem('DARK_MODE', JSON.stringify(darkState))
   }

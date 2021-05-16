@@ -9,19 +9,25 @@ import { fade, makeStyles } from '@material-ui/core/styles'
 import useEventListener from '../../hooks/useEventListener'
 
 const useStyles = makeStyles((theme) => ({
-  newProject: {
+  container: {
+    height: 40,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  inputField: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    marginRight: theme.spacing(2),
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
+      // marginLeft: theme.spacing(3),
+      width: '16rem',
     },
   },
   inputRoot: {
@@ -51,7 +57,8 @@ export default function EditableText(props) {
     setShowInput(true)
   }
   const handleSubmit = (event) => {
-    if (event.charCode === 13) {
+    console.log('clicked: ', event)
+    if (event.keyCode === 13) {
       const finalText = inputText
         .trim() // remove any extra spaces
         .replace(/&nbsp;/g, ' ') // replace html spaces
@@ -63,9 +70,8 @@ export default function EditableText(props) {
       setShowInput(false)
     }
   }
-  const handleLeave = useCallback(
+  const handleKeyboardLeave = useCallback(
     (event) => {
-      console.log(event)
       if (event.key === 'Escape') {
         setInputText(startText)
         setShowInput(false)
@@ -73,30 +79,37 @@ export default function EditableText(props) {
     },
     [startText]
   )
+  const handleClickAway = () => {
+    setInputText(startText)
+    setShowInput(false)
+  }
 
-  useEventListener('keydown', handleLeave)
+  useEventListener('keydown', handleKeyboardLeave)
 
   return (
-    <ClickAwayListener onClickAway={handleLeave}>
-      {showInput ? (
-        <div className={classes.newProject}>
-          <InputBase
-            placeholder='New Project'
-            onKeyDown={handleSubmit}
-            value={inputText}
-            onChange={handleInputChange}
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-            inputProps={{ 'aria-label': 'New Project' }}
-          />
-        </div>
-      ) : (
-        <Typography variant='h6' onClick={handleSwitchToInput}>
-          {inputText}
-        </Typography>
-      )}
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <div className={classes.container}>
+        {showInput ? (
+          <div className={classes.inputField}>
+            <InputBase
+              autoFocus={true}
+              placeholder='New Project'
+              onKeyDown={handleSubmit}
+              value={inputText}
+              onChange={handleInputChange}
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ 'aria-label': 'New Project' }}
+            />
+          </div>
+        ) : (
+          <Typography variant='h6' onClick={handleSwitchToInput}>
+            {inputText}
+          </Typography>
+        )}
+      </div>
     </ClickAwayListener>
   )
 }

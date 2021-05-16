@@ -3,36 +3,31 @@ import React from 'react'
 
 // import modules
 import { makeStyles } from '@material-ui/core/styles'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
-import { Card } from '@material-ui/core'
+import { Paper } from '@material-ui/core'
 
 // import project files
 import { editColumnOrder, editProjectOrder, editTaskOrder } from './projectSlice'
 import Project from './pages/Project'
 
 const useStyles = makeStyles((theme) => ({
-  grow: {
+  page: {
     position: 'absolute',
     top: 64,
     left: 0,
     width: '100vw',
-    height: '100vh',
+    height: 'calc(100vh - 64px)',
+    overflowX: 'hidden',
   },
   dropZone: {
     margin: theme.spacing(2),
-  },
-  projectsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.background.paper,
-    padding: '1rem',
+    overflowX: 'hidden',
   },
 }))
 
-export default function Projects() {
+export default function Projects(props) {
+  const { darkMode } = props
   const classes = useStyles()
   const dispatch = useDispatch()
   const projects = useSelector((state) => state.projects.project)
@@ -41,8 +36,10 @@ export default function Projects() {
   // handler for drag-and-drop
   const onDragEnd = (result) => {
     const { destination, source, draggableId, type } = result
+
     // if there is no destination, abort
     if (!destination) return
+
     // if the source and destination are the same, no need to do anything
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
 
@@ -70,13 +67,10 @@ export default function Projects() {
 
     // if you're dragging tasks
     if (type === 'task') {
-      const startColumn = projects.columns[source.droppableId]
-      const endColumn = projects.columns[destination.droppableId]
-
       dispatch(
         editTaskOrder({
-          startColumnId: startColumn.id,
-          endColumnId: endColumn.id,
+          startColumnId: source.droppableId,
+          endColumnId: destination.droppableId,
           source: source.index,
           destination: destination.index,
           taskId: draggableId,
@@ -86,24 +80,26 @@ export default function Projects() {
   }
 
   return (
-    <div className={classes.grow}>
+    <div className={classes.page}>
       <div className={classes.dropZone}>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId='all-projects' direction='vertical' type='project'>
             {(provided) => (
-              <div
-                className={classes.projectsContainer}
+              <Paper
+                elevation={3}
+                style={{
+                  minHeight: `${80 * projectOrder.length + 15 + projectOrder.length}px`,
+                  padding: '1px 0px',
+                }}
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                <Card>
-                  {projectOrder.map((id, index) => (
-                    <Project key={id} projectId={id} index={index} />
-                  ))}
-                </Card>
+                {projectOrder.map((id, index) => (
+                  <Project key={id} projectId={id} index={index} darkMode={darkMode} />
+                ))}
 
                 {provided.placeholder}
-              </div>
+              </Paper>
             )}
           </Droppable>
         </DragDropContext>

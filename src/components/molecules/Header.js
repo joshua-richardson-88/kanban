@@ -86,7 +86,6 @@ export default function Header(props) {
   const [newProjectTitle, setNewProjectTitle] = useState('')
 
   const handleThemeChange = () => {
-    console.log('calling toggle theme')
     props.toggleTheme()
   }
 
@@ -94,7 +93,6 @@ export default function Header(props) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
   const handleProfileMenuOpen = (event) => {
-    console.log('account button clicked')
     setAnchorEl(event.currentTarget)
   }
   const handleMobileMenuClose = () => {

@@ -18,7 +18,7 @@ export default function App() {
       <CssBaseline />
       <div className='app'>
         <Header darkMode={theme.palette.type} toggleTheme={toggleDarkMode} />
-        <Projects />
+        <Projects darkMode={theme.palette.type} />
       </div>
     </ThemeProvider>
   )
