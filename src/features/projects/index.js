@@ -18,11 +18,25 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     width: '100vw',
     height: 'calc(100vh - 64px)',
-    overflowX: 'hidden',
+    overflow: 'hidden',
   },
   dropZone: {
     margin: theme.spacing(2),
     overflowX: 'hidden',
+    maxHeight: 'calc(100vh - 96px)',
+    '&::-webkit-scrollbar': {
+      width: '12px',
+      height: '12px',
+    },
+    '&::-webkit-scrollbar-track': {
+      borderRadius: '12px',
+      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
+      webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0,0,0,.3)',
+      borderRadius: '12px',
+    },
   },
 }))
 
@@ -81,14 +95,17 @@ export default function Projects(props) {
 
   return (
     <div className={classes.page}>
-      <div className={classes.dropZone}>
+      <Paper className={classes.dropZone}>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId='all-projects' direction='vertical' type='project'>
             {(provided) => (
               <Paper
                 elevation={3}
                 style={{
-                  minHeight: `${80 * projectOrder.length + 15 + projectOrder.length}px`,
+                  minHeight:
+                    projectOrder.length > 0
+                      ? `${80 * projectOrder.length + 15 + projectOrder.length}px`
+                      : '168px',
                   padding: '1px 0px',
                 }}
                 {...provided.droppableProps}
@@ -103,7 +120,7 @@ export default function Projects(props) {
             )}
           </Droppable>
         </DragDropContext>
-      </div>
+      </Paper>
     </div>
   )
 }

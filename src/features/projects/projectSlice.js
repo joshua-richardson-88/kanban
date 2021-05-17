@@ -5,9 +5,15 @@ const projectSlice = createSlice({
   name: 'projects',
   initialState: {},
   reducers: {
+    clearAll(state) {
+      state.project = {}
+      state.column = {}
+      state.task = {}
+      state.projectOrder = []
+    },
     createColumn: {
       reducer: (state, { payload: { column, projectId } }) => {
-        state.project[projectId].columnIds.push(column.id)
+        state.project[projectId].columnIds = [column.id, ...state.project[projectId].columnIds]
         state.column[column.id] = column
       },
       prepare: ({ projectId, columnId }) => {
@@ -25,12 +31,12 @@ const projectSlice = createSlice({
     createProject: {
       reducer: (state, { payload }) => {
         console.log('got payload: ', payload)
-        state.projectOrder.push(payload.id)
+        state.projectOrder = [payload.id, ...state.projectOrder]
         state.project[payload.id] = payload
       },
       prepare: (text) => {
         const id = cuid()
-        const color = { h: Math.floor(Math.random() * 256), s: '30%' }
+        const color = { h: Math.floor(Math.random() * 360), s: '30%' }
         const title = text
           .trim() // remove any extra spaces
           .replace(/&nbsp;/g, ' ') // replace html spaces
@@ -43,7 +49,7 @@ const projectSlice = createSlice({
     },
     createTask: {
       reducer: (state, { payload: { task, columnId } }) => {
-        state.column[columnId].taskIds.push(task.id)
+        state.column[columnId].taskIds = [task.id, ...state.column[columnId].taskIds]
         state.task[task.id] = task
       },
       prepare: ({ columnId, title }) => {
@@ -113,6 +119,7 @@ const projectSlice = createSlice({
 })
 
 export const {
+  clearAll,
   createColumn,
   createProject,
   createTask,

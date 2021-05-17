@@ -22,7 +22,7 @@ import Brightness4Icon from '@material-ui/icons/Brightness4'
 
 // import project files
 import { Spacer } from '../atoms'
-import { createProject } from '../../features/projects/projectSlice'
+import { clearAll, createProject } from '../../features/projects/projectSlice'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -106,10 +106,14 @@ export default function Header(props) {
     setMobileMoreAnchorEl(event.currentTarget)
   }
   const handleCreateProject = (event) => {
-    if (event.charCode === 13) {
+    if (event.charCode === 13 && newProjectTitle.length > 0) {
       dispatch(createProject(newProjectTitle))
       setNewProjectTitle('')
     }
+  }
+  const handleClearAll = () => {
+    handleMenuClose()
+    dispatch(clearAll())
   }
 
   const menuId = 'primary-search-account-menu'
@@ -124,6 +128,7 @@ export default function Header(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleClearAll}>Clear All Projects</MenuItem>
       <MenuItem onClick={handleThemeChange}>
         <Typography style={{ marginRight: '2rem' }} variant='body1'>
           Toggle Dark Mode

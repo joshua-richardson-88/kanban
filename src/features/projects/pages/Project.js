@@ -1,17 +1,17 @@
 // import react libraries
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 // import modules
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import {
+  Button,
   Card,
   CardHeader,
+  ClickAwayListener,
   Collapse,
   Divider,
   IconButton,
   InputBase,
-  Menu,
-  MenuItem,
   Paper,
 } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
@@ -30,8 +30,10 @@ import {
   updateProjectTitle,
 } from '../projectSlice'
 import Column from './Column'
+import useEventListener from '../../../hooks/useEventListener'
 
 const useStyles = makeStyles((theme) => ({
+  collapse: { minHeight: '3.4rem !important' },
   expand: {
     transform: 'rotate(270deg)',
     marginLeft: 'auto',
@@ -64,9 +66,15 @@ const useStyles = makeStyles((theme) => ({
   newProject: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor:
+      theme.palette.type === 'dark'
+        ? fade(theme.palette.common.white, 0.15)
+        : fade(theme.palette.common.black, 0.15),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor:
+        theme.palette.type === 'dark'
+          ? fade(theme.palette.common.white, 0.25)
+          : fade(theme.palette.common.black, 0.25),
     },
     margin: '8px 0',
     width: '100%',
@@ -92,6 +100,19 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: '12px',
     },
   },
+  projectMenu: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '0.5rem',
+  },
+  projectMenuIcon: {
+    position: 'relative',
+  },
   root: {
     margin: '1rem',
   },
@@ -104,15 +125,14 @@ export default function Project(props) {
   const project = useSelector((state) => state.projects.project[projectId])
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const [collapsed, setCollapsed] = useState(project.collapsed)
-  const [anchorEl, setAnchorEl] = useState(null)
-  const isMenuOpen = Boolean(anchorEl)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const handleProjectMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget)
+    setMenuOpen(true)
     setCollapsed(false)
   }
   const handleMenuClose = () => {
-    setAnchorEl(null)
+    setMenuOpen(false)
   }
   const handleCreateColumn = (event) => {
     if (event.charCode === 13) {
@@ -127,42 +147,6 @@ export default function Project(props) {
     dispatch(removeProject({ projectId }))
   }
 
-  const projectMenuId = `${project.title}-management-menu`
-  const renderProjectMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-      id={projectMenuId}
-      keepMounted
-      transformOrigin={{ vertical: -27, horizontal: 256 }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleDeleteProject}>
-        <div className={classes.menuItem}>
-          <DeleteForeverIcon />
-          <span style={{ marginLeft: '1rem', fontSize: '1.2rem' }}>Delete Project</span>
-        </div>
-      </MenuItem>
-      <Divider />
-      <MenuItem>
-        <div className={classes.newProject}>
-          <InputBase
-            placeholder='New Column'
-            onKeyPress={handleCreateColumn}
-            value={newColumnTitle}
-            onChange={handleNewColumnTitleChange}
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-            inputProps={{ 'aria-label': 'New Column' }}
-          />
-        </div>
-      </MenuItem>
-    </Menu>
-  )
-
   const handleExpandClick = () => {
     setCollapsed(!collapsed)
     dispatch(editProjectCollapsed({ projectId, isCollapsed: !collapsed }))
@@ -176,6 +160,14 @@ export default function Project(props) {
     }%)`,
   })
 
+  const handleKeyboardLeave = useCallback((event) => {
+    if (event.key === 'Escape') {
+      setMenuOpen(false)
+    }
+  }, [])
+
+  useEventListener('keydown', handleKeyboardLeave)
+
   return (
     <Draggable draggableId={projectId} index={index}>
       {(provided) => (
@@ -188,15 +180,43 @@ export default function Project(props) {
           <Card elevation={8} style={getProjectStyle()}>
             <CardHeader
               action={
-                <IconButton
-                  aria-label='show more'
-                  aria-controls={projectMenuId}
-                  aria-haspopup='true'
-                  onClick={handleProjectMenuOpen}
-                  color='inherit'
-                >
-                  <MoreIcon />
-                </IconButton>
+                <div className={classes.projectMenuIcon}>
+                  <IconButton
+                    aria-label='show more'
+                    aria-haspopup='true'
+                    onClick={handleProjectMenuOpen}
+                    color='inherit'
+                  >
+                    <MoreIcon />
+                  </IconButton>
+                  {menuOpen ? (
+                    <ClickAwayListener onClickAway={handleMenuClose}>
+                      <Paper className={classes.projectMenu} elevation={8}>
+                        <Button
+                          onClick={handleDeleteProject}
+                          fullWidth
+                          startIcon={<DeleteForeverIcon />}
+                        >
+                          Delete Project
+                        </Button>
+                        <Divider />
+                        <div className={classes.newProject}>
+                          <InputBase
+                            placeholder='New Column'
+                            onKeyPress={handleCreateColumn}
+                            value={newColumnTitle}
+                            onChange={handleNewColumnTitleChange}
+                            classes={{
+                              root: classes.inputRoot,
+                              input: classes.inputInput,
+                            }}
+                            inputProps={{ 'aria-label': 'New Column' }}
+                          />
+                        </div>
+                      </Paper>
+                    </ClickAwayListener>
+                  ) : null}
+                </div>
               }
               avatar={
                 <IconButton
@@ -210,7 +230,7 @@ export default function Project(props) {
               }
               title={<EditableText startText={project.title} submitCallback={handleTitleUpdate} />}
             />
-            <Collapse in={!collapsed} timeout='auto' unmountOnExit>
+            <Collapse in={!collapsed} timeout='auto' unmountOnExit className={classes.collapse}>
               <Droppable droppableId={projectId} direction='horizontal' type='column'>
                 {(provided, snapshot) => (
                   <Paper
@@ -237,7 +257,6 @@ export default function Project(props) {
               </Droppable>
             </Collapse>
           </Card>
-          {renderProjectMenu}
         </div>
       )}
     </Draggable>
