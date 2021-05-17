@@ -1,5 +1,5 @@
 // import react libraries
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 // import modules
 import { Draggable, Droppable } from 'react-beautiful-dnd'
@@ -149,6 +149,13 @@ export default function Project(props) {
       darkMode === 'dark' ? '30' : '60'
     }%)`,
   })
+  useEffect(() => {
+    setCardStyle({
+      backgroundColor: `hsl(${projectColor}, ${project.color.s}, ${
+        darkMode === 'dark' ? '30' : '60'
+      }%)`,
+    })
+  }, [darkMode, project.color.s, projectColor])
 
   const handleProjectMenuOpen = (event) => {
     setMenuOpen(true)
@@ -177,11 +184,6 @@ export default function Project(props) {
   const handleTitleUpdate = (newTitle) => {
     dispatch(updateProjectTitle({ projectId, newTitle }))
   }
-  const getProjectStyle = () => ({
-    backgroundColor: `hsl(${project.color.h}, ${project.color.s}, ${
-      darkMode === 'dark' ? '30' : '60'
-    }%)`,
-  })
 
   const MIN_SLIDER = 0
   const MAX_SLIDER = 360
@@ -321,7 +323,7 @@ export default function Project(props) {
                   <Paper
                     elevation={3}
                     className={classes.projectContainer}
-                    style={getProjectStyle()}
+                    style={cardStyle}
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                   >
