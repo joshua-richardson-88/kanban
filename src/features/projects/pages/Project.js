@@ -10,9 +10,13 @@ import {
   ClickAwayListener,
   Collapse,
   Divider,
+  Grid,
   IconButton,
+  Input,
   InputBase,
   Paper,
+  Slider,
+  Typography,
 } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { fade, makeStyles } from '@material-ui/core/styles'
@@ -27,13 +31,26 @@ import {
   createColumn,
   editProjectCollapsed,
   removeProject,
+  updateProjectColor,
   updateProjectTitle,
 } from '../projectSlice'
 import Column from './Column'
 import useEventListener from '../../../hooks/useEventListener'
 
 const useStyles = makeStyles((theme) => ({
-  collapse: { minHeight: '3.4rem !important' },
+  collapse: { minHeight: '12rem !important' },
+  colorPicker: {
+    width: '100%',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  divider: {
+    border: 1,
+    width: '100%',
+    margin: '1rem',
+  },
   expand: {
     transform: 'rotate(270deg)',
     marginLeft: 'auto',
@@ -126,6 +143,12 @@ export default function Project(props) {
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const [collapsed, setCollapsed] = useState(project.collapsed)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [projectColor, setProjectColor] = useState(project.color.h)
+  const [cardStyle, setCardStyle] = useState({
+    backgroundColor: `hsl(${projectColor}, ${project.color.s}, ${
+      darkMode === 'dark' ? '30' : '60'
+    }%)`,
+  })
 
   const handleProjectMenuOpen = (event) => {
     setMenuOpen(true)
@@ -160,6 +183,35 @@ export default function Project(props) {
     }%)`,
   })
 
+  const MIN_SLIDER = 0
+  const MAX_SLIDER = 360
+  const handleSliderChange = (_event, newValue) => {
+    setProjectColor(newValue)
+    setCardStyle({
+      backgroundColor: `hsl(${newValue}, ${project.color.s}, ${
+        darkMode === 'dark' ? '30' : '60'
+      }%)`,
+    })
+    dispatch(updateProjectColor({ projectId, newColor: newValue }))
+  }
+  const handleColorInputChange = (event) => {
+    const inputNumber = parseInt(event.target.value, 10)
+    if (isNaN(inputNumber)) return
+
+    setProjectColor(inputNumber)
+    setCardStyle({
+      backgroundColor: `hsl(${inputNumber}, ${project.color.s}, ${
+        darkMode === 'dark' ? '30' : '60'
+      }%)`,
+    })
+
+    dispatch(updateProjectColor({ projectId, newColor: inputNumber }))
+  }
+  const handleColorInputBlur = () => {
+    if (projectColor < MIN_SLIDER) setProjectColor(MIN_SLIDER)
+    if (projectColor > MAX_SLIDER) setProjectColor(MAX_SLIDER)
+  }
+
   const handleKeyboardLeave = useCallback((event) => {
     if (event.key === 'Escape') {
       setMenuOpen(false)
@@ -177,7 +229,7 @@ export default function Project(props) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Card elevation={8} style={getProjectStyle()}>
+          <Card elevation={8} style={cardStyle}>
             <CardHeader
               action={
                 <div className={classes.projectMenuIcon}>
@@ -199,7 +251,40 @@ export default function Project(props) {
                         >
                           Delete Project
                         </Button>
-                        <Divider />
+                        <Divider className={classes.divider} />
+                        <div className={classes.colorPicker}>
+                          <Typography id='color-picker' gutterBottom>
+                            Change Color
+                          </Typography>
+                          <Grid container spacing={2} alignItems='center'>
+                            <Grid item xs>
+                              <Slider
+                                value={projectColor}
+                                step={1}
+                                min={MIN_SLIDER}
+                                max={MAX_SLIDER}
+                                onChange={handleSliderChange}
+                                aria-labelledby='color-picker'
+                              />
+                            </Grid>
+                            <Grid item>
+                              <Input
+                                value={projectColor}
+                                margin='dense'
+                                onChange={handleColorInputChange}
+                                onBlur={handleColorInputBlur}
+                                inputProps={{
+                                  step: 1,
+                                  min: MIN_SLIDER,
+                                  max: MAX_SLIDER,
+                                  type: 'number',
+                                  'aria-labelledby': 'color-picker',
+                                }}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
+                        <Divider className={classes.divider} />
                         <div className={classes.newProject}>
                           <InputBase
                             placeholder='New Column'

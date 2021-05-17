@@ -112,6 +112,9 @@ const projectSlice = createSlice({
     updateProjectTitle(state, { payload: { projectId, newTitle } }) {
       state.project[projectId].title = newTitle
     },
+    updateProjectColor(state, { payload: { projectId, newColor } }) {
+      state.project[projectId].color.h = newColor
+    },
     updateColumnTitle(state, { payload: { columnId, newTitle } }) {
       state.column[columnId].title = newTitle
     },
@@ -130,6 +133,7 @@ export const {
   removeColumn,
   removeProject,
   updateColumnTitle,
+  updateProjectColor,
   updateProjectTitle,
 } = projectSlice.actions
 export default projectSlice.reducer
