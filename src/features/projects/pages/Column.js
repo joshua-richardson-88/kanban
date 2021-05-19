@@ -21,7 +21,8 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 
 // import project files
 import { EditableText } from '../../../components/atoms'
-import { createTask, removeColumn, updateColumnTitle } from '../projectSlice'
+import { removeColumn, updateColumnTitle } from '../columnSlice'
+import { createTask } from '../taskSlice'
 import Task from './Task'
 
 const useStyles = makeStyles((theme) => ({
@@ -83,9 +84,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Column(props) {
   const { color, columnId, darkMode, index, projectId } = props
+
   const classes = useStyles()
   const dispatch = useDispatch()
-  const column = useSelector((state) => state.projects.column[columnId])
+  const column = useSelector((state) => state.columns[columnId])
+
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [anchorEl, setAnchorEl] = useState(null)
   const isMenuOpen = Boolean(anchorEl)

@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Paper } from '@material-ui/core'
 
 // import project files
-import { editColumnOrder, editProjectOrder, editTaskOrder } from './projectSlice'
+import { editColumnOrder, editProjectOrder } from './projectSlice'
+import { editTaskOrder } from './columnSlice'
 import Project from './pages/Project'
 
 const useStyles = makeStyles((theme) => ({
@@ -44,8 +45,8 @@ export default function Projects(props) {
   const { darkMode } = props
   const classes = useStyles()
   const dispatch = useDispatch()
-  const projects = useSelector((state) => state.projects.project)
-  const projectOrder = useSelector((state) => state.projects.projectOrder)
+  const projects = useSelector((state) => state.projects.list)
+  const projectOrder = useSelector((state) => state.projects.order)
 
   // handler for drag-and-drop
   const onDragEnd = (result) => {

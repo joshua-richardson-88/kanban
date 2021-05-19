@@ -3,30 +3,22 @@ import { configureStore } from '@reduxjs/toolkit'
 
 // import project files
 import projectReducer from '../features/projects/projectSlice'
+import columnReducer from '../features/projects/columnSlice'
+import taskReducer from '../features/projects/taskSlice'
 
 // if nothing in local storage, use this object for the state
 const defaultState = {
+  columns: {
+    'column-1': { id: 'column-1', title: 'Todo', taskIds: ['task-1'] },
+    'column-2': { id: 'column-2', title: 'In progress', taskIds: ['task-2', 'task-3'] },
+    'column-3': { id: 'column-3', title: 'Review', taskIds: [] },
+    'column-4': { id: 'column-4', title: 'Completed', taskIds: ['task-4'] },
+    'column-5': { id: 'column-5', title: 'Completed', taskIds: ['task-5', 'task-6'] },
+    'column-6': { id: 'column-6', title: 'Completed', taskIds: ['task-7', 'task-8', 'task-9'] },
+  },
   projects: {
-    task: {
-      'task-1': { id: 'task-1', content: 'Content for task 1' },
-      'task-2': { id: 'task-2', content: 'Content for task-2' },
-      'task-3': { id: 'task-3', content: 'Content for task-3' },
-      'task-4': { id: 'task-4', content: 'Content for task-4' },
-      'task-5': { id: 'task-5', content: 'Content for task-5' },
-      'task-6': { id: 'task-6', content: 'Content for task-6' },
-      'task-7': { id: 'task-7', content: 'Content for task-7' },
-      'task-8': { id: 'task-8', content: 'Content for task-8' },
-      'task-9': { id: 'task-9', content: 'Content for task-9' },
-    },
-    column: {
-      'column-1': { id: 'column-1', title: 'Todo', taskIds: ['task-1'] },
-      'column-2': { id: 'column-2', title: 'In progress', taskIds: ['task-2', 'task-3'] },
-      'column-3': { id: 'column-3', title: 'Review', taskIds: [] },
-      'column-4': { id: 'column-4', title: 'Completed', taskIds: ['task-4'] },
-      'column-5': { id: 'column-5', title: 'Completed', taskIds: ['task-5', 'task-6'] },
-      'column-6': { id: 'column-6', title: 'Completed', taskIds: ['task-7', 'task-8', 'task-9'] },
-    },
-    project: {
+    order: ['project-1', 'project-2'],
+    list: {
       'project-1': {
         id: 'project-1',
         title: 'A Thing',
@@ -42,7 +34,17 @@ const defaultState = {
         columnIds: ['column-5', 'column-6'],
       },
     },
-    projectOrder: ['project-1', 'project-2'],
+  },
+  tasks: {
+    'task-1': { id: 'task-1', title: 'Content for task 1' },
+    'task-2': { id: 'task-2', title: 'Content for task-2' },
+    'task-3': { id: 'task-3', title: 'Content for task-3' },
+    'task-4': { id: 'task-4', title: 'Content for task-4' },
+    'task-5': { id: 'task-5', title: 'Content for task-5' },
+    'task-6': { id: 'task-6', title: 'Content for task-6' },
+    'task-7': { id: 'task-7', title: 'Content for task-7' },
+    'task-8': { id: 'task-8', title: 'Content for task-8' },
+    'task-9': { id: 'task-9', title: 'Content for task-9' },
   },
 }
 
@@ -71,7 +73,9 @@ function loadFromLocalStorage() {
 
 const store = configureStore({
   reducer: {
+    columns: columnReducer,
     projects: projectReducer,
+    tasks: taskReducer,
   },
   preloadedState: loadFromLocalStorage(),
 })

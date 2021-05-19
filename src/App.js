@@ -7,7 +7,7 @@ import { CssBaseline } from '@material-ui/core'
 
 // import project files
 import useDarkMode from './hooks/useDarkMode'
-import { Header } from './components/molecules'
+import { Header } from './components/organisms'
 import Projects from './features/projects'
 
 export default function App() {

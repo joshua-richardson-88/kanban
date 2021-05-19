@@ -1,4 +1,7 @@
 import EditableText from './EditableText'
+import NotificationsMenu from './NotificationsMenu'
+import ProjectInput from './ProjectInput'
 import Spacer from './Spacer'
+import UserMenu from './UserMenu'
 
-export { EditableText, Spacer }
+export { EditableText, NotificationsMenu, ProjectInput, Spacer, UserMenu }

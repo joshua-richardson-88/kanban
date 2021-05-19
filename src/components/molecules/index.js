@@ -1,3 +1,4 @@
-import Header from './Header'
+import MobileHeaderSection from './MobileHeaderSection'
+import DesktopHeaderSection from './DesktopHeaderSection'
 
-export { Header }
+export { DesktopHeaderSection, MobileHeaderSection }

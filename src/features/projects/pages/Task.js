@@ -10,16 +10,6 @@ import { fade, makeStyles } from '@material-ui/core/styles'
 // import project files
 
 const useStyles = makeStyles((theme) => ({
-  expand: {
-    transform: 'rotate(270deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(0deg)',
-  },
   inputRoot: {
     color: 'inherit',
   },
@@ -68,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Project(props) {
   const { color, darkMode, taskId, index } = props
   const classes = useStyles()
-  const task = useSelector((state) => state.projects.task[taskId])
+  const task = useSelector((state) => state.tasks[taskId])
 
   const getProjectStyle = () => ({
     backgroundColor: `hsl(${color.h}, ${color.s}, ${darkMode === 'dark' ? '30' : '60'}%)`,

@@ -1,3 +1,3 @@
-import Projects from './Projects'
+import Header from './Header'
 
-export { Projects }
+export { Header }

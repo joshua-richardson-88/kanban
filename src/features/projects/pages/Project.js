@@ -28,12 +28,12 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 // import project files
 import { EditableText } from '../../../components/atoms'
 import {
-  createColumn,
   editProjectCollapsed,
   removeProject,
   updateProjectColor,
   updateProjectTitle,
 } from '../projectSlice'
+import { createColumn } from '../columnSlice'
 import Column from './Column'
 import useEventListener from '../../../hooks/useEventListener'
 
@@ -48,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     border: 1,
-    width: '100%',
-    margin: '1rem',
+    width: 'calc(100% - 0.4rem)',
+    margin: '0.4rem',
   },
   expand: {
     transform: 'rotate(270deg)',
@@ -126,6 +126,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0.5rem',
+    zIndex: 1,
   },
   projectMenuIcon: {
     position: 'relative',
@@ -139,7 +140,8 @@ export default function Project(props) {
   const { darkMode, projectId, index } = props
   const classes = useStyles()
   const dispatch = useDispatch()
-  const project = useSelector((state) => state.projects.project[projectId])
+  const project = useSelector((state) => state.projects.list[projectId])
+
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const [collapsed, setCollapsed] = useState(project.collapsed)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -149,6 +151,7 @@ export default function Project(props) {
       darkMode === 'dark' ? '30' : '60'
     }%)`,
   })
+
   useEffect(() => {
     setCardStyle({
       backgroundColor: `hsl(${projectColor}, ${project.color.s}, ${
@@ -166,7 +169,7 @@ export default function Project(props) {
   }
   const handleCreateColumn = (event) => {
     if (event.charCode === 13) {
-      dispatch(createColumn({ projectId, columnId: newColumnTitle }))
+      dispatch(createColumn({ projectId, titleName: newColumnTitle }))
       setNewColumnTitle('')
     }
   }
@@ -246,13 +249,19 @@ export default function Project(props) {
                   {menuOpen ? (
                     <ClickAwayListener onClickAway={handleMenuClose}>
                       <Paper className={classes.projectMenu} elevation={8}>
-                        <Button
-                          onClick={handleDeleteProject}
-                          fullWidth
-                          startIcon={<DeleteForeverIcon />}
-                        >
-                          Delete Project
-                        </Button>
+                        <div className={classes.newProject}>
+                          <InputBase
+                            placeholder='New Column'
+                            onKeyPress={handleCreateColumn}
+                            value={newColumnTitle}
+                            onChange={handleNewColumnTitleChange}
+                            classes={{
+                              root: classes.inputRoot,
+                              input: classes.inputInput,
+                            }}
+                            inputProps={{ 'aria-label': 'New Column' }}
+                          />
+                        </div>
                         <Divider className={classes.divider} />
                         <div className={classes.colorPicker}>
                           <Typography id='color-picker' gutterBottom>
@@ -287,19 +296,13 @@ export default function Project(props) {
                           </Grid>
                         </div>
                         <Divider className={classes.divider} />
-                        <div className={classes.newProject}>
-                          <InputBase
-                            placeholder='New Column'
-                            onKeyPress={handleCreateColumn}
-                            value={newColumnTitle}
-                            onChange={handleNewColumnTitleChange}
-                            classes={{
-                              root: classes.inputRoot,
-                              input: classes.inputInput,
-                            }}
-                            inputProps={{ 'aria-label': 'New Column' }}
-                          />
-                        </div>
+                        <Button
+                          onClick={handleDeleteProject}
+                          fullWidth
+                          startIcon={<DeleteForeverIcon />}
+                        >
+                          Delete Project
+                        </Button>
                       </Paper>
                     </ClickAwayListener>
                   ) : null}

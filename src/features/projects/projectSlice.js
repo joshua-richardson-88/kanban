@@ -5,39 +5,20 @@ const projectSlice = createSlice({
   name: 'projects',
   initialState: {},
   reducers: {
-    clearAll(state) {
-      state.project = {}
-      state.column = {}
-      state.task = {}
-      state.projectOrder = []
-    },
-    createColumn: {
-      reducer: (state, { payload: { column, projectId } }) => {
-        state.project[projectId].columnIds = [column.id, ...state.project[projectId].columnIds]
-        state.column[column.id] = column
-      },
-      prepare: ({ projectId, columnId }) => {
-        const id = cuid()
-        const title = columnId
-          .trim() // remove any extra spaces
-          .replace(/&nbsp;/g, ' ') // replace html spaces
-          .replace(/&lt;/g, '<') // replace html less-than
-          .replace(/&gt;/g, '>') // replace html greater-than
-          .replace(/\n/g, '') // remove line-breaks
-
-        return { payload: { column: { id, title, taskIds: [] }, projectId } }
-      },
+    dropAll(state) {
+      state.list = {}
+      state.order = []
     },
     createProject: {
       reducer: (state, { payload }) => {
         console.log('got payload: ', payload)
-        state.projectOrder = [payload.id, ...state.projectOrder]
-        state.project[payload.id] = payload
+        state.order = [payload.id, ...state.order]
+        state.list[payload.id] = payload
       },
-      prepare: (text) => {
+      prepare: (projectTitle) => {
         const id = cuid()
         const color = { h: Math.floor(Math.random() * 360), s: '30%' }
-        const title = text
+        const title = projectTitle
           .trim() // remove any extra spaces
           .replace(/&nbsp;/g, ' ') // replace html spaces
           .replace(/&lt;/g, '<') // replace html less-than
@@ -47,92 +28,55 @@ const projectSlice = createSlice({
         return { payload: { id, title, collapsed: false, color, columnIds: [] } }
       },
     },
-    createTask: {
-      reducer: (state, { payload: { task, columnId } }) => {
-        state.column[columnId].taskIds = [task.id, ...state.column[columnId].taskIds]
-        state.task[task.id] = task
-      },
-      prepare: ({ columnId, title }) => {
-        const id = cuid()
-        const sanitizedTitle = title
-          .trim() // remove any extra spaces
-          .replace(/&nbsp;/g, ' ') // replace html spaces
-          .replace(/&lt;/g, '<') // replace html less-than
-          .replace(/&gt;/g, '>') // replace html greater-than
-          .replace(/\n/g, '') // remove line-breaks
-
-        return { payload: { task: { id, content: sanitizedTitle }, columnId } }
-      },
-    },
     editColumnOrder(
       state,
       { payload: { columnId, destination, endProjectId, source, startProjectId } }
     ) {
       if (startProjectId === endProjectId) {
-        state.project[startProjectId].columnIds.splice(source, 1)
-        state.project[startProjectId].columnIds.splice(destination, 0, columnId)
+        state.list[startProjectId].columnIds.splice(source, 1)
+        state.list[startProjectId].columnIds.splice(destination, 0, columnId)
       } else {
-        state.project[startProjectId].columnIds.splice(source, 1)
-        state.project[endProjectId].columnIds.splice(destination, 0, columnId)
+        state.list[startProjectId].columnIds.splice(source, 1)
+        state.list[endProjectId].columnIds.splice(destination, 0, columnId)
       }
     },
     editProjectOrder(state, { payload: { source, destination, id } }) {
-      state.projectOrder.splice(source, 1)
-      state.projectOrder.splice(destination, 0, id)
+      state.order.splice(source, 1)
+      state.order.splice(destination, 0, id)
     },
     editProjectCollapsed(state, { payload: { projectId, isCollapsed } }) {
-      console.log('got project: ', projectId)
-      console.log('got collapsed: ', isCollapsed)
-      state.project[projectId].collapsed = isCollapsed
-    },
-    editTaskOrder(state, { payload: { startColumnId, endColumnId, source, destination, taskId } }) {
-      if (startColumnId === endColumnId) {
-        state.column[startColumnId].taskIds.splice(source, 1)
-        state.column[startColumnId].taskIds.splice(destination, 0, taskId)
-      } else {
-        state.column[startColumnId].taskIds.splice(source, 1)
-        state.column[endColumnId].taskIds.splice(destination, 0, taskId)
-      }
+      state.list[projectId].collapsed = isCollapsed
     },
     removeProject(state, { payload: { projectId } }) {
-      const { [projectId]: value, ...withoutProject } = state.project
+      const { [projectId]: value, ...withoutProject } = state.list
 
-      state.project = withoutProject
-      state.projectOrder.splice(state.projectOrder.indexOf(projectId), 1)
-    },
-    removeColumn(state, { payload: { columnId, projectId } }) {
-      const { [columnId]: value, ...withoutColumn } = state.column
-
-      state.column = withoutColumn
-      state.project[projectId].columnIds.splice(
-        state.project[projectId].columnIds.indexOf(columnId),
-        1
-      )
+      state.list = withoutProject
+      state.order.splice(state.order.indexOf(projectId), 1)
     },
     updateProjectTitle(state, { payload: { projectId, newTitle } }) {
-      state.project[projectId].title = newTitle
+      state.list[projectId].title = newTitle
     },
     updateProjectColor(state, { payload: { projectId, newColor } }) {
-      state.project[projectId].color.h = newColor
+      state.list[projectId].color.h = newColor
     },
-    updateColumnTitle(state, { payload: { columnId, newTitle } }) {
-      state.column[columnId].title = newTitle
+  },
+  extraReducers: {
+    'columns/removeColumn': (state, { payload: { columnId, projectId } }) => {
+      state.list[projectId].columnIds.splice(state.list[projectId].columnIds.indexOf(columnId), 1)
+    },
+    'columns/createColumn': (state, { payload: { projectId, column } }) => {
+      state.list[projectId].columnIds.splice(0, 0, column.id)
     },
   },
 })
 
 export const {
-  clearAll,
-  createColumn,
+  dropAll,
   createProject,
-  createTask,
   editColumnOrder,
   editProjectCollapsed,
   editProjectOrder,
-  editTaskOrder,
-  removeColumn,
   removeProject,
-  updateColumnTitle,
   updateProjectColor,
   updateProjectTitle,
 } = projectSlice.actions
