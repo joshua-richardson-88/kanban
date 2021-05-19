@@ -10,7 +10,7 @@ import { Paper } from '@material-ui/core'
 // import project files
 import { editColumnOrder, editProjectOrder } from './projectSlice'
 import { editTaskOrder } from './columnSlice'
-import Project from './pages/Project'
+import { Project } from '../../components/organisms'
 
 const useStyles = makeStyles((theme) => ({
   page: {

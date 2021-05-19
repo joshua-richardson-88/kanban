@@ -41,6 +41,9 @@ const columnSlice = createSlice({
   },
   extraReducers: {
     'projects/dropAll': (state) => ({}),
+    'tasks/createTask': (state, { payload: { columnId, task } }) => {
+      state[columnId].taskIds.splice(0, 0, task.id)
+    },
   },
 })
 

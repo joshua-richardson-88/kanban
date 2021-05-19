@@ -1,4 +1,6 @@
-import MobileHeaderSection from './MobileHeaderSection'
+import ColumnMenu from './ColumnMenu'
 import DesktopHeaderSection from './DesktopHeaderSection'
+import MobileHeaderSection from './MobileHeaderSection'
+import ProjectMenu from './ProjectMenu'
 
-export { DesktopHeaderSection, MobileHeaderSection }
+export { ColumnMenu, DesktopHeaderSection, MobileHeaderSection, ProjectMenu }

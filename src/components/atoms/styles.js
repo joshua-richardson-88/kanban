@@ -1,6 +1,13 @@
 import { fade, makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles((theme) => ({
+  colorPicker: {
+    width: '100%',
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
   inputText: {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: '1em',

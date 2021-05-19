@@ -56,7 +56,7 @@ export default function Header({ toggleTheme, darkMode }) {
             Project Manager
           </Typography>
           <Spacer />
-          <ProjectInput handleDone={handleCreateProject} />
+          <ProjectInput handleDone={handleCreateProject} placeholder='New Project' />
           <Spacer />
           <DesktopHeaderSection darkMode={darkMode} toggleTheme={toggleTheme} />
           <MobileHeaderSection />

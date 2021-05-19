@@ -3,6 +3,10 @@ import { makeStyles } from '@material-ui/core/styles'
 const drawerWidth = 240
 
 export const useStyles = makeStyles((theme) => ({
+  deleteButton: {
+    marginLeft: '1rem',
+    fontSize: '1.2rem',
+  },
   divider: {
     border: 1,
     width: 'calc(100% - 0.4rem)',

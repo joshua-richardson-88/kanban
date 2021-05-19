@@ -1,5 +1,5 @@
 // import react libraries
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 // import modules
 import { useDispatch } from 'react-redux'
@@ -11,7 +11,8 @@ import MoreIcon from '@material-ui/icons/MoreVert'
 import { useStyles } from './styles'
 import { removeProject } from '../../features/projects/projectSlice'
 import { createColumn } from '../../features/projects/columnSlice'
-import { ProjectInput } from '../atoms'
+import { ColorPicker, ProjectInput } from '../atoms'
+import useEventListener from '../../hooks/useEventListener'
 
 export default function ProjectMenu({ projectId, toggleCollapsed }) {
   const classes = useStyles()
@@ -26,6 +27,10 @@ export default function ProjectMenu({ projectId, toggleCollapsed }) {
   const handleMenuClose = () => {
     setMenuOpen(false)
   }
+  const handleKeyboardLeave = useCallback((event) => {
+    if (event.key === 'Escape') setMenuOpen(false)
+  }, [])
+  useEventListener('keydown', handleKeyboardLeave)
 
   // menu items functionality
   // --ProjectInput
@@ -50,9 +55,9 @@ export default function ProjectMenu({ projectId, toggleCollapsed }) {
       {menuOpen ? (
         <ClickAwayListener onClickAway={handleMenuClose}>
           <Paper className={classes.projectMenu} elevation={8}>
-            <ProjectInput handleDone={handleCreateColumn} />
+            <ProjectInput handleDone={handleCreateColumn} placeholder='New Column' />
             <Divider className={classes.divider} />
-            <ColorPicker />
+            <ColorPicker projectId={projectId} />
             <Divider className={classes.divider} />
             <Button onClick={handleDeleteProject} fullWidth startIcon={<DeleteForeverIcon />}>
               Delete Project

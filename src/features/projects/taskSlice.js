@@ -9,7 +9,7 @@ const taskSlice = createSlice({
       reducer: (state, { payload: { task } }) => {
         state[task.id] = task
       },
-      prepare: ({ titleName }) => {
+      prepare: ({ columnId, titleName }) => {
         const id = cuid()
         const title = titleName
           .trim() // remove any extra spaces
@@ -18,7 +18,7 @@ const taskSlice = createSlice({
           .replace(/&gt;/g, '>') // replace html greater-than
           .replace(/\n/g, '') // remove line-breaks
 
-        return { payload: { task: { id, title } } }
+        return { payload: { columnId, task: { id, title } } }
       },
     },
   },

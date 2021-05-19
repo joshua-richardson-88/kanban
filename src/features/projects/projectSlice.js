@@ -57,7 +57,7 @@ const projectSlice = createSlice({
       state.list[projectId].title = newTitle
     },
     updateProjectColor(state, { payload: { projectId, newColor } }) {
-      state.list[projectId].color.h = newColor
+      state.list[projectId].color = { ...state.list[projectId].color, h: newColor }
     },
   },
   extraReducers: {
