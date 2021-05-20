@@ -32,7 +32,6 @@ export const useStyles = makeStyles((theme) => ({
     border: '2px solid #000',
     borderRadius: theme.shape.borderRadius * 2,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
   },
   projectContainer: {
     flex: 1,

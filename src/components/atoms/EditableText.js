@@ -44,8 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function EditableText(props) {
-  const { submitCallback, startText } = props
+export default function EditableText({ startText, submitCallback }) {
   const classes = useStyles()
   const [showInput, setShowInput] = useState(false)
   const [inputText, setInputText] = useState(startText)

@@ -18,6 +18,7 @@ export default function Column({ color, columnId, darkMode, index, projectId }) 
   const classes = useStyles()
   const dispatch = useDispatch()
   const column = useSelector((state) => state.columns[columnId])
+  const projectTitle = useSelector((state) => state.projects.list[projectId].title)
 
   // sets the card style for the column
   const getProjectStyle = () => ({
@@ -31,7 +32,7 @@ export default function Column({ color, columnId, darkMode, index, projectId }) 
 
   // handles the creation of a new task in this column
   const handleCreateTask = (newTitle) => {
-    dispatch(createTask({ columnId, titleName: newTitle }))
+    dispatch(createTask({ columnId, columnTitle: column.title, projectTitle, titleName: newTitle }))
   }
 
   return (
