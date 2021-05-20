@@ -22,6 +22,18 @@ export const useStyles = makeStyles((theme) => ({
   collapse: {
     minHeight: '12rem !important',
   },
+  modalContainer: {
+    position: 'absolute',
+    top: '10vh',
+    left: '10vw',
+    width: '80vw',
+    height: '80vh',
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    borderRadius: theme.shape.borderRadius * 2,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
   projectContainer: {
     flex: 1,
     display: 'flex',
