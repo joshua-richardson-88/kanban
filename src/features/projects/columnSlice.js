@@ -21,13 +21,16 @@ const columnSlice = createSlice({
         return { payload: { column: { id, title, taskIds: [] }, projectId } }
       },
     },
-    editTaskOrder(state, { payload: { startColumnId, endColumnId, source, destination, taskId } }) {
-      if (startColumnId === endColumnId) {
-        state[startColumnId].taskIds.splice(source, 1)
-        state[startColumnId].taskIds.splice(destination, 0, taskId)
+    editTaskOrder(
+      state,
+      { payload: { destinationIndex, endColumn, sourceIndex, startColumn, taskId } }
+    ) {
+      if (startColumn.id === endColumn.id) {
+        state[startColumn.id].taskIds.splice(sourceIndex, 1)
+        state[startColumn.id].taskIds.splice(destinationIndex, 0, taskId)
       } else {
-        state[startColumnId].taskIds.splice(source, 1)
-        state[endColumnId].taskIds.splice(destination, 0, taskId)
+        state[startColumn.id].taskIds.splice(sourceIndex, 1)
+        state[endColumn.id].taskIds.splice(sourceIndex, 0, taskId)
       }
     },
     removeColumn(state, { payload: { columnId } }) {

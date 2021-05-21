@@ -46,6 +46,7 @@ export default function Projects(props) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const projects = useSelector((state) => state.projects.list)
+  const columns = useSelector((state) => state.columns)
   const projectOrder = useSelector((state) => state.projects.order)
 
   // handler for drag-and-drop
@@ -61,7 +62,11 @@ export default function Projects(props) {
     // if you're dragging projects
     if (type === 'project') {
       dispatch(
-        editProjectOrder({ source: source.index, destination: destination.index, id: draggableId })
+        editProjectOrder({
+          sourceIndex: source.index,
+          destinationIndex: destination.index,
+          id: draggableId,
+        })
       )
     }
     // if you're dragging columns
@@ -72,9 +77,9 @@ export default function Projects(props) {
       dispatch(
         editColumnOrder({
           columnId: draggableId,
-          destination: destination.index,
+          destinationIndex: destination.index,
           endProjectId: endProject.id,
-          source: source.index,
+          sourceIndex: source.index,
           startProjectId: startProject.id,
         })
       )
@@ -82,12 +87,15 @@ export default function Projects(props) {
 
     // if you're dragging tasks
     if (type === 'task') {
+      const startColumn = columns[source.droppableId]
+      const endColumn = columns[destination.droppableId]
+
       dispatch(
         editTaskOrder({
-          startColumnId: source.droppableId,
-          endColumnId: destination.droppableId,
-          source: source.index,
-          destination: destination.index,
+          destinationIndex: destination.index,
+          endColumn,
+          sourceIndex: source.index,
+          startColumn,
           taskId: draggableId,
         })
       )
