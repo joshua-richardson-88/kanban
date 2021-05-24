@@ -30,6 +30,25 @@ export default function useDarkMode() {
   const theme = createMuiTheme({
     themeName: 'Adaptive Dark and Light',
     overrides: {
+      MuiCssBaseline: {
+        '@global': {
+          '*': {
+            'scrollbar-width': 'thin',
+          },
+          '*::-webkit-scrollbar': {
+            width: '12px',
+            height: '12px',
+          },
+          '*::-webkit-scrollbar-track': {
+            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
+            webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
+          },
+          '*::-webkit-scrollbar-thumb': {
+            backgroundColor: 'rgba(0,0,0,.3)',
+            borderRadius: '12px',
+          },
+        },
+      },
       MuiFormLabel: {
         root: {
           color: '#999999',

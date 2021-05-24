@@ -30,6 +30,9 @@ export const useStyles = makeStyles((theme) => ({
   hide: {
     display: 'none',
   },
+  menuList: {
+    padding: 0,
+  },
   projectMenu: {
     position: 'absolute',
     top: 0,

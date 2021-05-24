@@ -1,6 +1,19 @@
 import { fade, makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles((theme) => ({
+  actionMenuItem: {
+    width: '20rem',
+  },
+  activityRow: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    justifyContent: 'space-between',
+    marginBottom: '0.5rem',
+    '&:hover': {
+      backgroundColor:
+        theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+    },
+  },
   colorPicker: {
     width: '100%',
     display: 'flex',
@@ -34,5 +47,14 @@ export const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(3),
       width: 'auto',
     },
+  },
+  taskModalContent: {
+    padding: '1rem',
+    marginBottom: '2rem',
+    backgroundColor:
+      theme.palette.type === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.2)',
+  },
+  taskModalDescription: {
+    marginBottom: '4rem',
   },
 }))

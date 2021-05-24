@@ -25,19 +25,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     overflowX: 'hidden',
     maxHeight: 'calc(100vh - 96px)',
-    '&::-webkit-scrollbar': {
-      width: '12px',
-      height: '12px',
-    },
-    '&::-webkit-scrollbar-track': {
-      borderRadius: '12px',
-      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
-      webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: 'rgba(0,0,0,.3)',
-      borderRadius: '12px',
-    },
   },
 }))
 
@@ -90,12 +77,22 @@ export default function Projects(props) {
       const startColumn = columns[source.droppableId]
       const endColumn = columns[destination.droppableId]
 
+      const projectArray = Object.values(projects)
+      const startProject = projectArray.filter((project) =>
+        project.columnIds.includes(startColumn.id)
+      )[0]
+      const endProject = projectArray.filter((project) =>
+        project.columnIds.includes(endColumn.id)
+      )[0]
+
       dispatch(
         editTaskOrder({
           destinationIndex: destination.index,
           endColumn,
+          endProject,
           sourceIndex: source.index,
           startColumn,
+          startProject,
           taskId: draggableId,
         })
       )

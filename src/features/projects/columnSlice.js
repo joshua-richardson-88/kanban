@@ -30,7 +30,7 @@ const columnSlice = createSlice({
         state[startColumn.id].taskIds.splice(destinationIndex, 0, taskId)
       } else {
         state[startColumn.id].taskIds.splice(sourceIndex, 1)
-        state[endColumn.id].taskIds.splice(sourceIndex, 0, taskId)
+        state[endColumn.id].taskIds.splice(destinationIndex, 0, taskId)
       }
     },
     removeColumn(state, { payload: { columnId } }) {

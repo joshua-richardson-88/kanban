@@ -35,14 +35,14 @@ const taskSlice = createSlice({
     },
     updateTaskDescription(state, { payload: { description, taskId } }) {
       state[taskId].activity.push({
-        content: `Updated description to: ${description}`,
+        content: [`Updated description to: ${description}`],
         when: Date.now(),
       })
       state[taskId].description = description
     },
     updateTaskTitle(state, { payload: { taskId, newTitle } }) {
       state[taskId].activity.push({
-        content: `Updated name from ${state[taskId].title} to ${newTitle}`,
+        content: [`Updated name from ${state[taskId].title} to ${newTitle}`],
         when: Date.now(),
       })
       state[taskId].title = newTitle
@@ -50,6 +50,78 @@ const taskSlice = createSlice({
   },
   extraReducers: {
     'projects/dropAll': (state) => ({}),
+    'columns/editTaskOrder': (
+      state,
+      {
+        payload: {
+          destinationIndex,
+          endColumn,
+          endProject,
+          sourceIndex,
+          startColumn,
+          startProject,
+          taskId,
+        },
+      }
+    ) => {
+      let content = ''
+
+      if (startProject.id === endProject.id) {
+        if (startColumn.id === endColumn.id) {
+          content = [
+            'Changed positions from ',
+            { position: sourceIndex || '0' },
+            ' to ',
+            { position: destinationIndex || '0' },
+            ' in ',
+            {
+              project: startProject.title,
+              color: { h: startProject.color.h, s: startProject.color.s },
+            },
+            ' - ',
+            {
+              column: startColumn.title,
+              color: { h: startProject.color.h, s: startProject.color.s },
+            },
+          ]
+        } else {
+          content = [
+            'Moved from ',
+            {
+              column: startColumn.title,
+              color: { h: startProject.color.h, s: startProject.color.s },
+            },
+            ' to ',
+            {
+              column: endColumn.title,
+              color: { h: startProject.color.h, s: startProject.color.s },
+            },
+          ]
+        }
+      } else {
+        content = [
+          'Moved from ',
+          {
+            project: startProject.title,
+            color: { h: startProject.color.h, s: startProject.color.s },
+          },
+          ' - ',
+          {
+            column: startColumn.title,
+            color: { h: startProject.color.h, s: startProject.color.s },
+          },
+          ' to ',
+          { project: endProject.title, color: { h: endProject.color.h, s: endProject.color.s } },
+          ' - ',
+          {
+            column: endColumn.title,
+            color: { h: endProject.color.h, s: endProject.color.s },
+          },
+        ]
+      }
+
+      state[taskId].activity.push({ content, when: Date.now() })
+    },
   },
 })
 

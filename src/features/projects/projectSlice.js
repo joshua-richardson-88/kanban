@@ -30,19 +30,19 @@ const projectSlice = createSlice({
     },
     editColumnOrder(
       state,
-      { payload: { columnId, destination, endProjectId, source, startProjectId } }
+      { payload: { columnId, destinationIndex, endProjectId, sourceIndex, startProjectId } }
     ) {
       if (startProjectId === endProjectId) {
-        state.list[startProjectId].columnIds.splice(source, 1)
-        state.list[startProjectId].columnIds.splice(destination, 0, columnId)
+        state.list[startProjectId].columnIds.splice(sourceIndex, 1)
+        state.list[startProjectId].columnIds.splice(destinationIndex, 0, columnId)
       } else {
-        state.list[startProjectId].columnIds.splice(source, 1)
-        state.list[endProjectId].columnIds.splice(destination, 0, columnId)
+        state.list[startProjectId].columnIds.splice(sourceIndex, 1)
+        state.list[endProjectId].columnIds.splice(destinationIndex, 0, columnId)
       }
     },
-    editProjectOrder(state, { payload: { source, destination, id } }) {
-      state.order.splice(source, 1)
-      state.order.splice(destination, 0, id)
+    editProjectOrder(state, { payload: { sourceIndex, destinationIndex, id } }) {
+      state.order.splice(sourceIndex, 1)
+      state.order.splice(destinationIndex, 0, id)
     },
     editProjectCollapsed(state, { payload: { projectId, isCollapsed } }) {
       state.list[projectId].collapsed = isCollapsed

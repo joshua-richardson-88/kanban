@@ -38,18 +38,6 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflowX: 'auto',
     padding: '0 8px',
-    '&::-webkit-scrollbar': {
-      width: '12px',
-      height: '12px',
-    },
-    '&::-webkit-scrollbar-track': {
-      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
-      webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.3)',
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: 'rgba(0,0,0,.3)',
-      borderRadius: '12px',
-    },
   },
   projectRoot: {
     margin: '1rem',
@@ -64,5 +52,21 @@ export const useStyles = makeStyles((theme) => ({
   taskRoot: {
     width: 'calc(100% - 1rem)',
     margin: '0.5rem',
+  },
+
+  // taskModal
+  taskModalContainer: {
+    padding: '1rem',
+    height: 'calc(80vh - 8.5rem)',
+    overflowY: 'auto',
+  },
+  actionList: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    '& > *': {
+      margin: theme.spacing(1, 0),
+    },
   },
 }))
